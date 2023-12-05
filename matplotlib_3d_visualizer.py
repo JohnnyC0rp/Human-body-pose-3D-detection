@@ -4,19 +4,16 @@ import threading
 import random
 import time
 
+
 class RealTimeScatter:
     def __init__(self):
         self.fig = plt.figure()
-        self.ax = self.fig.add_subplot(111, projection='3d')
+        self.ax = self.fig.add_subplot(111, projection="3d")
         self.sc = self.ax.scatter([], [], [])
         self.x, self.y, self.z = [], [], []
 
-    def update_plot(self, new_frames):
+    def update_plot(self):
         while True:
-            self.x.append(random.random())
-            self.y.append(random.random())
-            self.z.append(random.random())
-
             self.sc._offsets3d = (self.x, self.y, self.z)
             plt.draw()
             time.sleep(0.1)
@@ -26,6 +23,15 @@ class RealTimeScatter:
         thread.daemon = True
         thread.start()
         plt.show()
+
+    def load_new_landmarks(self, landmarks):
+        if landmarks:
+            self.x, self.y, self.z = [], [], []
+            for landmark in landmarks:
+                self.x.append(landmark.x)
+                self.y.append(landmark.y)
+                self.z.append(landmark.z)
+
 
 # if __name__ == "__main__":
 #     plot = RealTimeScatter()
