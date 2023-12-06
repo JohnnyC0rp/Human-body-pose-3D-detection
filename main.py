@@ -8,7 +8,7 @@ import threading
 
 
 def main_video_processing_function():
-    cap = cv2.VideoCapture("test2.mp4")
+    cap = cv2.VideoCapture("test4.mp4")
     while cap.isOpened():
         _, frame = cap.read()
 
@@ -19,9 +19,8 @@ def main_video_processing_function():
         pose_results = pose.process(frame_rgb)
         # print(pose_results.pose_landmarks)
 
-        plot.load_new_landmarks(pose_results.pose_landmarks.landmark)
-
         if pose_results.pose_landmarks:
+            plot.load_new_landmarks(pose_results.pose_landmarks.landmark)
             my_cv2_drawer.draw_landmarks(frame, pose_results.pose_landmarks)
         # draw skeleton on the frame
         # mp_drawing.draw_landmarks(frame, pose_results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
@@ -50,7 +49,6 @@ mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
 
+plot = RealTimeScatter(mp_pose.POSE_CONNECTIONS)
 threading.Thread(target=main_video_processing_function).start()
-
-plot = RealTimeScatter()
 plot.show()
